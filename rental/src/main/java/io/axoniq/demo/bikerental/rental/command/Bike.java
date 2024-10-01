@@ -28,6 +28,10 @@ public class Bike {
 
     @CommandHandler
     public String handle(RequestBikeCommand command){
+        if(rentalReference != null){
+            throw new IllegalStateException("Bike is already rented");
+        }
+
         String rentalReference = UUID.randomUUID().toString();
         AggregateLifecycle.apply(new BikeRequestedEvent(
             command.bikeId(), command.renter(),rentalReference));
