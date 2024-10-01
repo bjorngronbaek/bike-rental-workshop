@@ -2,7 +2,10 @@ package io.axoniq.demo.bikerental.rental.ui;
 
 import io.axoniq.demo.bikerental.coreapi.rental.BikeStatus;
 import io.axoniq.demo.bikerental.coreapi.rental.RegisterBikeCommand;
+import io.axoniq.demo.bikerental.coreapi.rental.RequestBikeCommand;
+
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,8 +48,7 @@ public class RentalController {
 
     @PostMapping("/requestBike")
     public CompletableFuture<String> requestBike(@RequestParam("bikeId") String bikeId, @RequestParam("renter") String renter) {
-        // TODO Implement
-        return null;
+        return commandGateway.send(new RequestBikeCommand(bikeId, renter));
     }
 
     @PostMapping("/returnBike")
@@ -57,8 +59,7 @@ public class RentalController {
 
     @GetMapping("/bikes")
     public CompletableFuture<List<BikeStatus>> findAll() {
-        // TODO Implement
-        return null;
+        return queryGateway.query("findAll", null, ResponseTypes.multipleInstancesOf(BikeStatus.class));
     }
 
     @GetMapping("/bikes/{bikeId}")
